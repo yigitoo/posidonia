@@ -10,6 +10,8 @@ gem "sinatra-activerecord"
 gem 'json'
 gem 'dotenv'
 
+gem 'rerun'
+
 # for database migration.
 gem 'sqlite3', '~> 1.6', '>= 1.6.2'
 gem "rake"
