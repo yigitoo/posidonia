@@ -13,6 +13,3 @@ gem 'dotenv'
 # for database migration.
 gem 'sqlite3', '~> 1.6', '>= 1.6.2'
 gem "rake"
-
-#for recover db via googleapis using drive service section
-gem "google-apis-drive_v3"
