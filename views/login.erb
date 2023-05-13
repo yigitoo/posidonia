@@ -6,12 +6,16 @@
         <h1 class="mb-2 text-2xl">Admin Panel Girişi</h1>
         <span class="text-gray-300">Giriş bilgierini doldur</span>
       </div>
-      <form action="/login" method="POST">
+      <form action="/login" method="POST" autocomplete="off">
         <div class="mb-4 text-lg">
-          <input class="rounded-3xl border-none bg-blue-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" style="border: 1px solid white;" type="text" name="name" placeholder="user@email.com" />
+          <input
+            type="email" name="email" placeholder="user@email.com" required=""
+            class="rounded-3xl border-none bg-blue-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" style="border: 1px solid white;" />
         </div>
         <div class="mb-4 text-lg">
-          <input class="rounded-3xl border-none bg-blue-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" style="border: 1px solid white;" type="Password" name="name" placeholder="*********" />
+          <input
+          type="password" name="password" placeholder="*********" required=""
+          class="rounded-3xl border-none bg-blue-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" style="border: 1px solid white;" />
         </div>
         <div class="mt-8 flex justify-center text-lg text-black">
           <button style="border: 1px solid white;" type="submit" class="rounded-3xl bg-blue-400 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-blue-600">Login</button>
@@ -20,3 +24,4 @@
     </div>
   </div>
 </div>
+<%= erb :footer %>
