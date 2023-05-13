@@ -1,11 +1,32 @@
+GIT
+  remote: https://github.com/sinatra/sinatra.git
+  revision: d409069c73f181058bf0a5f9ec30d0b6d65a7c40
+  specs:
+    sinatra (3.0.6)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.6)
+      tilt (~> 2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    bson (4.15.0)
+    activemodel (7.0.4.3)
+      activesupport (= 7.0.4.3)
+    activerecord (7.0.4.3)
+      activemodel (= 7.0.4.3)
+      activesupport (= 7.0.4.3)
+    activesupport (7.0.4.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+    concurrent-ruby (1.2.2)
     dotenv (2.8.1)
+    i18n (1.13.0)
+      concurrent-ruby (~> 1.0)
     json (2.6.3)
-    mongo (2.18.2)
-      bson (>= 4.14.1, < 5.0.0)
+    minitest (5.18.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.9)
@@ -14,13 +35,15 @@ GEM
     rack (2.2.7)
     rack-protection (3.0.6)
       rack
+    rake (13.0.6)
     ruby2_keywords (0.0.5)
-    sinatra (3.0.6)
-      mustermann (~> 3.0)
-      rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.6)
-      tilt (~> 2.0)
+    sinatra-activerecord (2.0.26)
+      activerecord (>= 4.1)
+      sinatra (>= 1.0)
+    sqlite3 (1.6.2-x86_64-linux)
     tilt (2.1.0)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
 
 PLATFORMS
   x86_64-linux
@@ -28,9 +51,11 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   json
-  mongo
   puma
-  sinatra
+  rake
+  sinatra!
+  sinatra-activerecord
+  sqlite3 (~> 1.6, >= 1.6.2)
 
 BUNDLED WITH
    2.4.13

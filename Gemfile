@@ -1,7 +1,18 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
+# for backend framework
+gem 'sinatra', :github => 'sinatra/sinatra'
 gem 'puma'
+# this one is used for db too! .d
+gem "sinatra-activerecord"
+
+# utilities
 gem 'json'
 gem 'dotenv'
-gem 'mongo'
+
+# for database migration.
+gem 'sqlite3', '~> 1.6', '>= 1.6.2'
+gem "rake"
+
+#for recover db via googleapis using drive service section
+gem "google-apis-drive_v3"
