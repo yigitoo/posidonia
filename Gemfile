@@ -8,8 +8,6 @@ gem "sinatra-activerecord"
 
 # utilities
 gem 'json'
-gem 'dotenv'
-
 gem 'rerun'
 
 # for database migration.

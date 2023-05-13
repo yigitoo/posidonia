@@ -3,7 +3,7 @@ require 'yaml'
 
 module API
     class Database
-        attr_accessor :database, :database_config :last_query
+        attr_accessor :database, :database_config, :last_query
         attr_reader :version
 
         def initialize
