@@ -5,8 +5,12 @@ module Middleware
     class Map < Sinatra::Base
         enable :sessions
 
-        post '/admin/map' do
-
+        post '/map/addItem' do
+            if session[:id] and session[:username] and session_user[:username]
+                redirect to('/map'), 200
+            else
+                redirect to('/'), 301
+            end
         end
     end
 

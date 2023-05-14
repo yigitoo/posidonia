@@ -16,10 +16,10 @@
 </head>
 <%= erb :navbar %>
 <hr>
-<div class="w-full h-[91vh]"id="map_id"></div>
+<div class="w-screen h-[90.5vh]"id="map_id"></div>
 <script>
-    var setViewLatLng = new L.LatLng(38.329355001, 28.0694747494);
-    var mymap = L.map('map_id').setView(setViewLatLng, 19)
+    var setViewLatLng = new L.LatLng(38.670766, 26.746846);
+    var mymap = L.map('map_id').setView(setViewLatLng, 9)
     let googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
         maxZoom: 30,
         attribution: 'Posidonia Oceinaca Koruma Haritası | &copy; 2024. All rights reserved.',
