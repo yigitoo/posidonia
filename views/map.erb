@@ -6,17 +6,21 @@
  }
  nav {
     background-size: cover;
-    z-index: 4;
+    z-index: 999;
     background-position: center;
     width: 100%;
     height: 100%;
     background-image:url('/Posidonia.png');
 }
+div nav {
+    z-index: 1000;
+}
 </style>
 </head>
+<body class="noselect">
 <%= erb :navbar %>
 <hr>
-<div class="w-screen h-[90.5vh]"id="map_id"></div>
+<div class="w-screen h-[90.5vh]" style="z-index: -1" id="map_id"></div>
 <script>
     var setViewLatLng = new L.LatLng(38.670766, 26.746846);
     var mymap = L.map('map_id').setView(setViewLatLng, 9)
@@ -27,3 +31,5 @@
     });
     googleSat.addTo(mymap)
 </script>
+</body>
+</html>
