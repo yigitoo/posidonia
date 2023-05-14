@@ -1,4 +1,29 @@
+<%= erb :header %>
 <%= erb :leaflet %>
+<style>
+ body {
+    background-image: none;
+ }
+ nav {
+    background-size: cover;
+    z-index: 4;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    background-image:url('/Posidonia.png');
+}
+</style>
+</head>
+<%= erb :navbar %>
+<hr>
+<div class="w-full h-[91vh]"id="map_id"></div>
 <script>
-    L.map('map_id').setView(new L.LatLng(38.329355001, 28.0694747494), 13)
+    var setViewLatLng = new L.LatLng(38.329355001, 28.0694747494);
+    var mymap = L.map('map_id').setView(setViewLatLng, 19)
+    let googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        maxZoom: 30,
+        attribution: 'Posidonia Oceinaca Koruma Haritası | &copy; 2024. All rights reserved.',
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    googleSat.addTo(mymap)
 </script>

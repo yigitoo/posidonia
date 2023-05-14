@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_13_115625) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_14_081433) do
   create_table "locations", force: :cascade do |t|
     t.string "lat"
     t.string "long"
@@ -20,7 +20,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_13_115625) do
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password"
-    t.string "email"
   end
 
 end

@@ -10,7 +10,6 @@ require 'json'
 
 #@brief: database actions, models and schemas files
 require_relative 'db/models'
-require_relative 'api'
 
 #@brief: middlewares
 require_relative 'middlewares/login'
@@ -18,6 +17,9 @@ require_relative 'middlewares/map.rb'
 
 #@brief: Main App!
 class PosidoniaServer < Sinatra::Base
+    # set root folder of the project
+    set :root, File.dirname(__FILE__)
+
     #@brief: datbase migration
     register Sinatra::ActiveRecordExtension
 
@@ -35,10 +37,12 @@ class PosidoniaServer < Sinatra::Base
     end
     get ('/') { erb :index }
     get ('/home') { erb :index }
-    get ('/map') { erb :map }
+    get ('/map') { erb :map, layout: false}
     get ('/login') { erb :login }
     get '/logout' do
-        session.delete(:user_id)
+        session.delete(:id)
+        session.delete(:username)
+        session.delete(:password)
         redirect '/login'
     end
     #@brief: static files
