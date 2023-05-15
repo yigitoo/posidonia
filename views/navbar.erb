@@ -1,7 +1,11 @@
 <nav class="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md relative px-4 py-4 flex justify-between items-center">
 		<a class="font-bold leading-none flex justify-center items-center" href="/" style="text-align: center">
 			<img style="vertical-align:middle" src="/logo.png" class="h-12">
-			<pre style="vertical-align:middle">   POSIDONIA OCEANICA KORUYUCU</pre>
+			<span class="ml-5" style="font-family: 'Poppins', sans-serif; color:white;">
+				<p class="font-bold text-white" style="vertical-align:middle">
+					POSIDONIA OCEANICA KORUYUCU
+				</p>
+			</span>
 		</a>
 		<div class="lg:hidden">
 		    <button style="color:white;" class="navbar-burger flex items-center p-3">
@@ -24,7 +28,7 @@
             <a class="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="/login">Haritayı Güncelle!</a>
         <% else %>
 			<div class="hidden lg:inline-block">
-				<a class=" mr-2 py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="/map/addItem">Yeni yer ekle!</a>
+				<a class=" mr-2 py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" href="/addItem">Yeni yer ekle!</a>
 				<a class="py-2 px-6 bg-red-500 hover:bg-red-600 text-sm text-white font-bold rounded-xl transition duration-200" href="/logout">Çıkış yap!</a>
 			</div>
 		<% end %>
@@ -57,7 +61,7 @@
 					<% if (session[:id] == nil) %>
 						<a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl" href="/login">Haritada güncelleme yap</a>
 					<% else %>
-						<a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl" href="/map/addItem">Yeni yer ekle</a>
+						<a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl" href="/addItem">Yeni yer ekle</a>
 						<a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-red-600 hover:bg-red-700  rounded-xl" href="/logout">Çıkış yap!</a>
 					<% end %>
 				</div>

@@ -13,7 +13,7 @@ require_relative 'db/models'
 
 #@brief: middlewares
 require_relative 'middlewares/login'
-require_relative 'middlewares/map.rb'
+require_relative 'middlewares/map'
 
 #@brief: Main App!
 class PosidoniaServer < Sinatra::Base
@@ -37,17 +37,17 @@ class PosidoniaServer < Sinatra::Base
     end
     get ('/') { erb :index }
     get ('/home') { erb :index }
-    get ('/map') { erb :map, layout: false}
     get ('/login') { erb :login }
-    get '/logout' do
+    get ('/map') { erb :map, layout: false}
+    get ('/addItem') { erb :add_map_item, layout: false }
+    get ('/logout') {
         session.delete(:id)
         session.delete(:username)
         session.delete(:password)
         redirect '/login'
-    end
+    }
     #@brief: static files
     get ('/logo.png') { send_file File.expand_path('logo.png', settings.public_folder) }
-    get ('/logo.svg') { send_file File.expand_path('logo.svg', settings.public_folder) }
     get ('/Posidonia.png') { send_file File.expand_path('Posidonia.png', settings.public_folder) }
 
     #@description: error code situations

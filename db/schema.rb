@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_14_081433) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_15_084707) do
   create_table "locations", force: :cascade do |t|
-    t.string "lat"
-    t.string "long"
+    t.text "polygon"
+    t.string "added_by"
     t.string "added_date"
   end
 

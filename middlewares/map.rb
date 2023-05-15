@@ -6,10 +6,16 @@ module Middleware
         enable :sessions
 
         post '/map/addItem' do
-            if session[:id] and session[:username] and session_user[:username]
-                redirect to('/map'), 200
+            if session[:id] and session[:username] and session_user[:username] then
+                database = SQLite3::Database.new 'db/posidonia.sqlite3'
+
+                database.execute <<-SQL
+                    INSERT INTO locations VALUES (
+                        JSON
+                    )
+                SQL
             else
-                redirect to('/'), 301
+                redirect to('/'), 403
             end
         end
     end
