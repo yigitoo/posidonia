@@ -1,4 +1,4 @@
-class Location < ActiveRecord::Base
+class User < ActiveRecord::Base
     validates_presence_of :username
     validates_presence_of :password
-    end
+end
