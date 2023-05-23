@@ -2,6 +2,8 @@
 <%= erb :leaflet %>
 <style>
  body {
+    overflow-x:hidden;
+    overflow-y:hidden;
     background-image: none;
  }
  nav {
@@ -20,16 +22,16 @@ div nav {
 <body>
 <%= erb :navbar %>
 <hr>
-<div class="w-screen h-[90.5vh]" style="z-index: 1" id="map_id"></div>
+<div class="w-screen h-[100vh]" style="z-index: 1" id="map_id"></div>
 <script>
     var setViewLatLng = new L.LatLng(38.670766, 26.746846);
-    var mymap = L.map('map_id').setView(setViewLatLng, 9)
+    var map = L.map('map_id').setView(setViewLatLng, 9)
     let googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
         maxZoom: 30,
         attribution: 'Posidonia Oceinaca Koruma Haritası | &copy; 2024. All rights reserved.',
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
-    googleSat.addTo(mymap)
+    googleSat.addTo(map);
 </script>
 </body>
 </html>

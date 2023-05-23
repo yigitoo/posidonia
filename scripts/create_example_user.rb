@@ -4,7 +4,7 @@ module Test
   class CreateUser
     database = SQLite3::Database.new "db/posidonia.sqlite3"
     result = database.execute <<-SQL
-      insert into users values (1, "yigitgumus", "adminsifresi123")
+      insert into users values (2, "admin", "admin")
     SQL
     puts result
   end

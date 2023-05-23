@@ -3,6 +3,8 @@
 <style>
  body {
     background-image: none;
+    overflow-x:hidden;
+    overflow-y:hidden;
  }
  nav {
     background-size: cover;
@@ -15,14 +17,47 @@
 div nav {
     z-index: 1000;
 }
+.gonderbtn {
+    z-index: 999999999;
+}
+
+.gonderbtn:hover {
+    cursor:pointer;
+}
 </style>
 </head>
 <body>
 <%= erb :navbar %>
 <hr>
-<div class="w-screen h-[90.5vh]" id="map_id"></div>
+<div class="w-screen h-[100vh]" id="map_id"></div>
+<div id="gönderbtn" class="leaflet-bottom leaflet-right inline-block mx-2 my-4 px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl" ion-button onclick="send_region()">
+    ALANI KARANTİNA ALTINA AL!
+</div>
 <script>
-    let sonuclar = [];
+    //@description: defitions of colors and markers;
+    const redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const RED_COLOR = "#E62315";
+    const GREEN_COLOR = "#4DC412";
+
+    //@descripions: locations array for sendig backend to prepare polygons
+    let locations =  [];
 
     var setViewLatLng = new L.LatLng(38.670766, 26.746846);
     var map = L.map('map_id').setView(setViewLatLng, 9)
@@ -31,19 +66,48 @@ div nav {
         attribution: 'Posidonia Oceinaca Koruma Haritası | &copy; 2024. All rights reserved.',
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
-    googleSat.addTo(map)
-    map.on('click', function(e){
-        var coord = e.latlng;
-        var lat = coord.lat;
-        var lng = coord.lng;
-        var marker = L.marker([lat, lng]).addTo(map);
-        var popup = L.popup()
-            .setContent(`Enlem: ${lat} | Boylam: ${lng}`)
-        marker.bindPopup(popup).openPopup();
+    googleSat.addTo(map);
 
-        sonuclar.push([lat, lng]);
+    async function get_address(lat,lng) {
+        const response = await fetch('http://localhost:8080/getAddr', {
+            method: "POST",
+            body: JSON.stringify({
+                lat: lat,
+                lng: lng
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const jsonData = await response.json();
+        return jsonData;
+    }
 
+    map.on('click', async function(event) {
+        let coordinates = event.latlng;
+        if (coordinates) {
+            let latitude = coordinates.lat;
+            let longtitude = coordinates.lng;
+
+            locations.push([latitude, longtitude]);
+            let result = await get_address(latitude, longtitude);
+            let popup = L.popup()
+                        .setContent(`Koordinatların, Enlem: ${latitude}, Boylam: ${longtitude} | ${result['addr']}`);
+
+            let marker =  L.marker(coordinates, { icon: greenIcon })
+                            .bindPopup(popup)
+                            .addTo(map).openPopup();
+
+        } else {
+            alert("Koordinatlar alınamadı!!!");
+        }
     });
+
+    async function send_region() {
+        const response = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=39b51f681a6345929728a75e57f5e32a`);
+        const jsonData = await response.json();
+        return [jsonData.features[0].properties.formatted, jsonData];
+    }
 </script>
 </body>
 </html>

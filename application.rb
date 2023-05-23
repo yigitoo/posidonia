@@ -39,7 +39,13 @@ class PosidoniaServer < Sinatra::Base
     get ('/home') { erb :index }
     get ('/login') { erb :login }
     get ('/map') { erb :map, layout: false}
-    get ('/addItem') { erb :add_map_item, layout: false }
+    get ('/addItem') {
+        if session[:id] and session[:username] and session[:password] then
+            erb :add_map_item, layout: false
+        else
+            redirect to('/'), 301
+        end
+    }
     get ('/logout') {
         session.delete(:id)
         session.delete(:username)
