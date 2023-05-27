@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -25,30 +26,66 @@ func SetupApi() *gin.Engine {
 		latitude := ctx.Params.ByName("latitude")
 		longitude := ctx.Params.ByName("longitude")
 
-		query_url := fmt.Sprintf(
-			"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
-			latitude,
-			longitude,
-			os.Getenv("API_KEY_GEOCODE"),
-		)
-		response, err := http.Get(query_url)
+		response, status_code, err := GeoCodeAPI(latitude, longitude)
+
+		logError(err)
+		formatted_address := gjson.Get(response, "features.0.properties.formatted").String()
+
+		ctx.JSON(status_code, gin.H{
+			"status": status_code,
+			"result": formatted_address,
+		})
+	})
+
+	r.GET("/bbox/:latitude/:longitude", func(ctx *gin.Context) {
+		latitude := ctx.Params.ByName("latitude")
+		longitude := ctx.Params.ByName("longitude")
+
+		response, status_code, err := GeoCodeAPI(latitude, longitude)
 		logError(err)
 
-		defer response.Body.Close()
-		body, err := io.ReadAll(response.Body)
-		logError(err)
-		formatted_address := gjson.Get(body, "features.properties.formatted").String()
-		println(formatted_address)
-		ctx.JSON(response.StatusCode, gin.H{
-			"message": formatted_address,
+		formatted_bbox_structs := gjson.Get(response, "features.0.bbox").Array()
+		formatted_bbox := make([]float64, 4)
+		for index, result := range formatted_bbox_structs {
+			item, err := strconv.ParseFloat(result.Raw, 64)
+			logError(err)
+			formatted_bbox[index] = item
+		}
+
+		ctx.JSON(status_code, gin.H{
+			"status":    status_code,
+			"bbox_list": formatted_bbox,
+			"x_min":     formatted_bbox[0],
+			"y_min":     formatted_bbox[1],
+			"x_max":     formatted_bbox[2],
+			"y_max":     formatted_bbox[3],
 		})
 	})
 
 	return r
 }
 
+func GeoCodeAPI(latitude, longitude string) (string, int, error) {
+
+	query_url := fmt.Sprintf(
+		"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
+		latitude,
+		longitude,
+		os.Getenv("API_KEY_GEOCODE"),
+	)
+
+	response, err := http.Get(query_url)
+	logError(err)
+
+	defer response.Body.Close()
+	body, err := io.ReadAll(response.Body)
+	logError(err)
+
+	return string(body), response.StatusCode, err
+}
+
 func logError(err error) {
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }

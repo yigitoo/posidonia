@@ -2,13 +2,13 @@ require 'sinatra/base'
 require 'sqlite3'
 require 'json'
 
-# for api requests.
-require 'faraday'
-require 'faraday/retry'
-require 'faraday_middleware'
+#@brief: for communicate with golang backend
+require 'net/http'
+require 'dotenv'
 
 module Middleware
     class Map < Sinatra::Base
+        Dotenv.load
         enable :sessions
 
         before '/getAddr' do
@@ -36,7 +36,6 @@ module Middleware
                 else
                     database.execute <<-SQL
                         INSERT INTO locations VALUES (
-
                         )
                     SQL
                 end
@@ -50,17 +49,9 @@ module Middleware
             latitude = @request_payload[:lat]
             longtitude = @request_payload[:lng]
 
-            @api_site_url = "https://api.geoapify.com"
-            @request_url = "/v1/geocode/reverse?lat=#{latitude}&lon=#{longtitude}&apiKey=39b51f681a6345929728a75e57f5e32a"
-            connection = Faraday.new(@api_site_url) do |f|
-                f.request :json
-                f.request :retry
-                f.response :json
-                f.adapter :net_http
-            end
 
-            response = connection.get(@request_url)
-
+            PORT_NO = ENV['GO_PORT']
+            response = Net::HTTP.get_response("localhost:#{PORT_NO}")
             content_type :json
             return {
                 'addr': response.body['features'][0]['properties']['formatted'],

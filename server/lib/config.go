@@ -2,7 +2,9 @@ package lib
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -46,7 +48,13 @@ func NewConfig() Config {
 		i dunno, but i use that port
 		for a port num problem.
 	*/
-	return Config{Port: 5632, ApiKeys: nil}
+	godotenv.Load()
+	value, err := strconv.ParseInt(os.Getenv("GO_PORT"), 10, 16)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return Config{Port: int16(value), ApiKeys: nil}
 }
 
 func (c Config) LoggingPort() {
