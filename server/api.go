@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	gojsonq "github.com/thedevsaddam/gojsonq/v2"
+	"github.com/tidwall/gjson"
 	"github.com/yigitoo/posidonia/server/lib"
 )
 
@@ -21,26 +21,26 @@ func SetupApi() *gin.Engine {
 
 	r := gin.Default()
 
-	r.GET("/coordinates/:latitude/:longtitude", func(ctx *gin.Context) {
+	r.GET("/coordinates/:latitude/:longitude", func(ctx *gin.Context) {
 		latitude := ctx.Params.ByName("latitude")
-		longtitude := ctx.Params.ByName("longtitude")
+		longitude := ctx.Params.ByName("longitude")
 
 		query_url := fmt.Sprintf(
 			"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
 			latitude,
-			longtitude,
+			longitude,
 			os.Getenv("API_KEY_GEOCODE"),
 		)
-		println(query_url)
 		response, err := http.Get(query_url)
 		logError(err)
 
 		defer response.Body.Close()
 		body, err := io.ReadAll(response.Body)
 		logError(err)
-
+		formatted_address := gjson.Get(body, "features.properties.formatted").String()
+		println(formatted_address)
 		ctx.JSON(response.StatusCode, gin.H{
-			"message": gojsonq.New().FromString(string(body)),
+			"message": formatted_address,
 		})
 	})
 
