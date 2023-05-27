@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	gojsonq "github.com/thedevsaddam/gojsonq/v2"
+	"github.com/tidwall/gjson"
 	"github.com/yigitoo/posidonia/server/lib"
 )
 
@@ -31,16 +31,16 @@ func SetupApi() *gin.Engine {
 			longitude,
 			os.Getenv("API_KEY_GEOCODE"),
 		)
-		println(query_url)
 		response, err := http.Get(query_url)
 		logError(err)
 
 		defer response.Body.Close()
 		body, err := io.ReadAll(response.Body)
 		logError(err)
-
+		formatted_address := gjson.Get(body, "features.properties.formatted").String()
+		println(formatted_address)
 		ctx.JSON(response.StatusCode, gin.H{
-			"message": gojsonq.New().FromString(string(body)),
+			"message": formatted_address,
 		})
 	})
 

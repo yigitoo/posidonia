@@ -92,5 +92,10 @@ func (c *Config) SetApiKeys() {
 }
 
 func (c Config) GetApiKeys(key string) string {
+	/*
+		@description:
+			- Getter for Api Key (map[string]string).
+			-- The keys are stored in .env files
+	*/
 	return c.ApiKeys[key]
 }

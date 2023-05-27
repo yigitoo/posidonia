@@ -6,6 +6,5 @@ type Coordinates struct {
 }
 
 type MapResponse struct {
-    Type `json:"type"`
-
+	Type `json:"type"`
 }
