@@ -4,6 +4,7 @@ require 'json'
 
 #@brief: for communicate with golang backend
 require 'net/http'
+require 'uri'
 require 'dotenv'
 
 module Middleware
@@ -46,18 +47,29 @@ module Middleware
 
         post '/getAddr' do
 
-            latitude = @request_payload[:lat]
-            longtitude = @request_payload[:lng]
-
+            latitude = @request_payload["lat"]
+            longitude = @request_payload["lng"]
 
             PORT_NO = ENV['GO_PORT']
-            response = Net::HTTP.get_response("localhost:#{PORT_NO}")
-            content_type :json
-            return {
-                'addr': response.body['features'][0]['properties']['formatted'],
-                'full': response.body
-            }.to_json
+            uri = URI("http://localhost:#{PORT_NO}/coordinates/#{latitude}/#{longitude}")
+            #params = { :limit => 10, :page => 3 }
+            #uri.query = URI.encode_www_form(params)
+            response = Net::HTTP.get_response(uri)
+            puts response.body if response.is_a?(Net::HTTPSuccess)
 
+            content_type :json
+
+            if !(response.is_a?(Net::HTTPSuccess))
+                return {
+                    "status": 404,
+                    "addr": "TESPİT EDİLEMEDİ!",
+                }.to_json
+            else
+                return {
+                    "status": 200,
+                    "addr": JSON.parse(response.body)["result"],
+                }.to_json
+            end
         end
     end
 
