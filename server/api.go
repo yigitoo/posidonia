@@ -21,14 +21,14 @@ func SetupApi() *gin.Engine {
 
 	r := gin.Default()
 
-	r.GET("/coordinates/:latitude/:longtitude", func(ctx *gin.Context) {
+	r.GET("/coordinates/:latitude/:longitude", func(ctx *gin.Context) {
 		latitude := ctx.Params.ByName("latitude")
-		longtitude := ctx.Params.ByName("longtitude")
+		longitude := ctx.Params.ByName("longitude")
 
 		query_url := fmt.Sprintf(
 			"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
 			latitude,
-			longtitude,
+			longitude,
 			os.Getenv("API_KEY_GEOCODE"),
 		)
 		println(query_url)
