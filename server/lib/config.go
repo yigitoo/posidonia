@@ -24,13 +24,6 @@ type Configuration interface {
 	SetApiKeys()
 	// @getter: ApiKeys (from .env file in the root of the project: server folder directory).
 	GetApiKeys(key string) string
-
-	/* @DEPRECATED!!!
-	// @setter: env_variables of project.
-	SetEnv(key string, value string)
-	// @getter: env_variables of project.
-	GetEnv() map[string]string
-	*/
 }
 
 type Config struct {
