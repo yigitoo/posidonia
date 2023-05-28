@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -9,8 +11,12 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/tidwall/gjson"
 	"github.com/yigitoo/posidonia/server/lib"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var config lib.Config = lib.NewConfig()
@@ -82,6 +88,38 @@ func GeoCodeAPI(latitude, longitude string) (string, int, error) {
 	logError(err)
 
 	return string(body), response.StatusCode, err
+}
+
+func ValidateLogin(username, password string) (string, error) {
+
+	if err := godotenv.Load(); err != nil {
+		logError(err)
+	}
+
+	uri := os.Getenv("DB_URI")
+	if uri == "" {
+		logError(errors.New("You must set your database connection link as DB_URI environment variable."))
+	}
+
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+
+	if err != nil {
+		logError(err)
+	}
+
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err == nil {
+			logError(err)
+		}
+	}()
+
+	collection := client.Database("posidonia").Collection("users")
+	title := "Back to the Future"
+
+	var result bson.M
+	err = collection.FindOne()
+
+	return string(user_uuid), nil
 }
 
 func logError(err error) {
