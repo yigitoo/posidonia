@@ -2,7 +2,6 @@ package lib
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -64,11 +64,6 @@ func (db *Database) ConnectDB(collection_name string) *mongo.Collection {
 
 	db.DBClient = client
 
-	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
 	collection := client.Database(db.DBName).Collection(db.DBCurrentCollectionName)
 	db.DBCurrentCollection = collection
 
@@ -77,20 +72,21 @@ func (db *Database) ConnectDB(collection_name string) *mongo.Collection {
 
 // DB OPERATIONS
 
-func (db *Database) FindOneQuery(collection *mongo.Collection, document bson.D) (string, error) {
-	var result bson.M
-	err := collection.FindOne(context.TODO(), document).Decode(&result)
+func (db *Database) FindOneQuery(document any) (User, error) {
+	var result User
+	err := db.DBCurrentCollection.FindOne(context.TODO(), document).Decode(&result)
 
 	if err == mongo.ErrNoDocuments {
 		LogError(errors.New(fmt.Sprintf("ERR: Document not found in the collection: %s", db.DBCurrentCollection)))
-		return "NOT_FOUND", errors.New("ERROR DOCUMENT NOT FOUNDED!")
+		return User{
+			UserID:   primitive.NewObjectID(),
+			Username: "NOT_FOUND",
+			Password: "NOT_FOUND",
+		}, errors.New("ERROR DOCUMENT NOT FOUNDED!")
 	}
 	LogError(err)
 
-	jsonData, err := json.MarshalIndent(result, "", "    ")
-	LogError(err)
-
-	return string(jsonData), nil
+	return result, nil
 }
 
 func (db *Database) DeleteOneQuery(filter bson.D) bool {

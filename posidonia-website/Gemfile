@@ -3,14 +3,8 @@ source 'https://rubygems.org'
 # for backend framework
 gem 'sinatra'
 gem 'puma'
-# this one is used for db too! .d
-gem "sinatra-activerecord"
 
 # utilities
 gem 'json'
 gem 'rerun'
 gem 'dotenv'
-
-# for database migration.
-gem 'sqlite3', '~> 1.6', '>= 1.6.2'
-gem "rake"

@@ -1,25 +1,38 @@
 require 'sinatra/base'
-require 'sqlite3'
+require 'dotenv'
+require 'json'
 
 module Middleware
     class Login < Sinatra::Base
+        Dotenv.load()
         enable :sessions
 
         post ('/login') do
-            database = SQLite3::Database.new "db/posidonia.sqlite3"
 
             username = params["username"].to_s
             password = params["password"].to_s
+            begin
+                uri = URI("http://localhost:#{ENV['GO_PORT']}/login")
+                http = Net::HTTP.new(uri.host, uri.port)
+                request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+                request.body = {username: username, password: password}.to_json
+                response = http.request(request)
+                body = JSON.parse(response.body)
 
-            database.execute ("select * from users") do |row|
-                if row[1] == username and row[2] == password then
-                    session[:id] = row[0]
-                    session[:username] = row[1]
-                    session[:password] = row[2]
-                    redirect to('/addItem'), 301
-                end
+                session[:id] = body["user_id"]
+                session[:username] = body["username"]
+
+                to_main = true
+            rescue => error
+                to_main = false
+                puts "failed #{error}"
             end
-            redirect to('/login'), 301
+
+            if to_main == true
+                redirect to('/addItem'), 301
+            else
+                redirect to('/login'), 301
+            end
         end
     end
 end

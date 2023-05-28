@@ -3,13 +3,9 @@
 #@Author: Yiğit GÜMÜŞ <github.com/yigitoo>
 #@Date: May 13 2023 - still continues.
 #-------
-require "sinatra/activerecord"
 require 'sinatra/base'
 require 'sinatra'
 require 'json'
-
-#@brief: database actions, models and schemas files
-require_relative 'db/models'
 
 #@brief: middlewares
 require_relative 'middlewares/login'
@@ -20,14 +16,11 @@ class PosidoniaServer < Sinatra::Base
     # set root folder of the project
     set :root, File.dirname(__FILE__)
 
-    #@brief: datbase migration
-    register Sinatra::ActiveRecordExtension
-
     #@brief: app settings and middlewares/controllers.
     use Middleware::Login # for session registeration and login actions
     use Middleware::Map   # for mapping technologies.
 
-    set :port, 8080
+    set :port, 4567
     set :bind, '0.0.0.0'
     set :public_folder, __dir__ + '/static'
 
@@ -40,7 +33,8 @@ class PosidoniaServer < Sinatra::Base
     get ('/login') { erb :login }
     get ('/map') { erb :map, layout: false}
     get ('/addItem') {
-        if session[:id] and session[:username] and session[:password] then
+        puts session[:id], session[:username]
+        if session[:id] and session[:username] then
             erb :add_map_item, layout: false
         else
             redirect to('/'), 301
@@ -49,7 +43,6 @@ class PosidoniaServer < Sinatra::Base
     get ('/logout') {
         session.delete(:id)
         session.delete(:username)
-        session.delete(:password)
         redirect '/login'
     }
     #@brief: static files
@@ -71,7 +64,7 @@ class PosidoniaServer < Sinatra::Base
 
     # own functions for utilities
     def get_session_user
-        if session['user_name'] == nil
+        if session[:username] == nil
             return nil
         else
             return true

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +18,7 @@ func SetupApi() *gin.Engine {
 	config.SetApiKeys()
 
 	r := gin.Default()
+	r.SetTrustedProxies([]string{"0.0.0.0"})
 
 	r.GET("/coordinates/:latitude/:longitude", func(ctx *gin.Context) {
 		latitude := ctx.Params.ByName("latitude")
@@ -60,6 +60,43 @@ func SetupApi() *gin.Engine {
 		})
 	})
 
+	r.GET("/id/:userid", func(ctx *gin.Context) {
+		user_id := ctx.Params.ByName("userid")
+		user, err := GetUserByID(user_id)
+		LogError(err)
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":   http.StatusOK,
+			"username": user.Username,
+		})
+	})
+
+	r.POST("/login", func(ctx *gin.Context) {
+		var request User
+
+		if err := ctx.BindJSON(&request); err != nil {
+			panic(err)
+		}
+
+		user, err := ValidateLogin(request.Username, request.Password)
+		LogError(err)
+		if err == nil {
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":   http.StatusOK,
+				"user_id":  user.UserID,
+				"username": user.Username,
+			})
+			// i use return because of
+			return
+		}
+		// this context
+		ctx.JSON(http.StatusOK, gin.H{
+			"status":  http.StatusBadRequest,
+			"message": "We aren't able to login to you because of credentials.",
+		})
+
+	})
+
 	return r
 }
 
@@ -69,7 +106,7 @@ func GeoCodeAPI(latitude, longitude string) (string, int, error) {
 		"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
 		latitude,
 		longitude,
-		os.Getenv("API_KEY_GEOCODE"),
+		config.GetApiKeys("geocode"),
 	)
 
 	response, err := http.Get(query_url)
@@ -80,10 +117,4 @@ func GeoCodeAPI(latitude, longitude string) (string, int, error) {
 	LogError(err)
 
 	return string(body), response.StatusCode, err
-}
-
-func ValidateLogin(username, password string) (string, error) {
-	user := ""
-
-	return string(user), nil
 }
