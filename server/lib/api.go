@@ -23,7 +23,7 @@ func SetupApi() *gin.Engine {
 		latitude := ctx.Params.ByName("latitude")
 		longitude := ctx.Params.ByName("longitude")
 
-		response, status_code, err := GeoCodeAPI(latitude, longitude)
+		response, status_code, err := GeoCodeQuery(latitude, longitude)
 
 		LogError(err)
 		formatted_address := gjson.Get(response, "features.0.properties.formatted").String()
