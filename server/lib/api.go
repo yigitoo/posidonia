@@ -2,7 +2,6 @@ package lib
 
 import (
 	"fmt"
-	"io"
 	"net/http"
 	"strconv"
 
@@ -39,7 +38,7 @@ func SetupApi() *gin.Engine {
 		latitude := ctx.Params.ByName("latitude")
 		longitude := ctx.Params.ByName("longitude")
 
-		response, status_code, err := GeoCodeAPI(latitude, longitude)
+		response, status_code, err := GeoCodeQuery(latitude, longitude)
 		LogError(err)
 
 		formatted_bbox_structs := gjson.Get(response, "features.0.bbox").Array()
@@ -98,23 +97,4 @@ func SetupApi() *gin.Engine {
 	})
 
 	return r
-}
-
-func GeoCodeAPI(latitude, longitude string) (string, int, error) {
-
-	query_url := fmt.Sprintf(
-		"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
-		latitude,
-		longitude,
-		config.GetApiKeys("geocode"),
-	)
-
-	response, err := http.Get(query_url)
-	LogError(err)
-
-	defer response.Body.Close()
-	body, err := io.ReadAll(response.Body)
-	LogError(err)
-
-	return string(body), response.StatusCode, err
 }

@@ -1,6 +1,9 @@
 package lib
 
 import (
+	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"time"
 
@@ -47,4 +50,23 @@ func GetUserByID(user_id string) (User, error) {
 
 	return result, err
 
+}
+
+func GeoCodeQuery(latitude, longitude string) (string, int, error) {
+
+	query_url := fmt.Sprintf(
+		"https://api.geoapify.com/v1/geocode/reverse?lat=%s&lon=%s&apiKey=%s",
+		latitude,
+		longitude,
+		config.GetApiKeys("geocode"),
+	)
+
+	response, err := http.Get(query_url)
+	LogError(err)
+
+	defer response.Body.Close()
+	body, err := io.ReadAll(response.Body)
+	LogError(err)
+
+	return string(body), response.StatusCode, err
 }
