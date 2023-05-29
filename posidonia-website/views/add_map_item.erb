@@ -29,8 +29,8 @@ div nav {
 <body>
 <%= erb :navbar %>
 <hr>
-<div class="w-screen h-[100vh]" id="map_id">
-    <div id="gonderbtn" class="leaflet-top leaflet-right block mx-2 my-4 px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl" ion-button onclick="send_region()">
+<div class="w-screen h-[100vh]" style="z-index: 1;" id="map_id">
+    <div id="gonderbtn" style="z-index:999999;" class="leaflet-top leaflet-right block mx-2 my-4 px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl" ion-button onclick="send_region()">
         ALANI KARANTİNA ALTINA AL!
     </div>
 </div>
@@ -96,13 +96,13 @@ div nav {
     var map = L.map('map_id').setView(setViewLatLng, 9)
     let googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
         maxZoom: 30,
-        attribution: 'Posidonia Oceinaca Koruma Haritası | &copy; 2024. All rights reserved.',
+        attribution: '<a href="https://github.com/yigitoo/posidonia">Posidonia Oceinaca Koruma Haritası</a> | &copy; 2024. All rights reserved.',
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
     googleSat.addTo(map);
 
     async function get_address(lat,lng) {
-        const response = await fetch('http://localhost:8008/getAddr', {
+        const response = await fetch('/getAddr', {
             method: "POST",
             body: JSON.stringify({
                 lat: lat,
@@ -144,7 +144,7 @@ div nav {
             window.alert(`Lütfen karantina altına alınmasını istediğiniz bölgeler için en az 3 nokta seçiniz.\nSeçtiğiniz:${locations.length}\nGeri kalan:${3 - locations.length}`)
         }
         else {
-            fetch(``, {
+            fetch(`/addItem`, {
               method: "POST",
               body: JSON.stringify(locations)
             })
@@ -155,20 +155,6 @@ div nav {
     }
     gonderbtn.addEventListener('click', send_region);
 
-    L.Control.Watermark = L.Control.extend({
-        onAdd: function(map) {
-            var button = L.DomUtil.create('button');
-            button.textContent = "Alanı karantina altına al!";
-            button.classList.add("leaflet-top", "leaflet-right", "block", "mx-2", "my-4", "px-4", "py-3", "mb-2","leading-loose", "text-xs", "text-center", "text-white", "font-semibold", "bg-blue-600", "hover:bg-blue-700",  "rounded-xl");
-
-            return button;
-        },
-        onRemove: function(map) {}
-    });
-
-    L.Control.Watermark = function(opts) {
-        return new L.Control.Watermark(opts);
-    }
 
     L.Control.Watermark({ position: 'bottomleft' }).addTo(map);
 </script>

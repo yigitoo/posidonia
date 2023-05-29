@@ -30,7 +30,31 @@ module Middleware
         end
 
         post '/getBbox' do
-            PORT_
+
+            latitude = @request_payload_getBbox["lat"]
+            longitude = @request_payload_getBbox["lng"]
+
+            uri = URI("http://localhost:#{ENV['GO_PORT']}/bbox/#{latitude}/#{longitude}")
+            response = Net::HTTP.get_response(uri)
+            puts response.body if response.is_a?(Net::HTTPSuccess)
+
+            content_type :json
+            if !(response.is_a?(Net::HTTPSuccess))
+                return {
+                    "status": 404,
+                    "bbox": "TESPİT EDİLEMEDİ",
+                }.to_json
+            else
+                parsed_response = JSON.parse(response.body)
+                return {
+                    "status": 200,
+                    "bbox_list": parsed_response['bbox_list'],
+                    "x_min": parsed_response['x_min'],
+                    "y_min": parsed_response['y_min'],
+                    "x_max": parsed_response['x_max'],
+                    "y_max": parsed_response['y_max'],
+                }.to_json
+            end
         end
 
         post '/getAddr' do
