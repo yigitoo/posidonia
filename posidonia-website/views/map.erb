@@ -1,0 +1,85 @@
+<%= erb :header %>
+<%= erb :leaflet %>
+<style>
+ body {
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background-image: none;
+ }
+ nav {
+    background-size: cover;
+    z-index: 999;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    background-image:url('/Posidonia.png');
+}
+div nav {
+    z-index: 1000;
+}
+</style>
+</head>
+<body>
+<%= erb :navbar %>
+<hr>
+<div class="w-screen h-[100vh]" style="z-index: 1" id="map_id"></div>
+<script>
+    const redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    const RED_COLOR = "#E62315";
+    const GREEN_COLOR = "#4DC412";
+
+    var setViewLatLng = new L.LatLng(38.670766, 26.746846);
+    var map = L.map('map_id').setView(setViewLatLng, 9)
+    let googleSat = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        maxZoom: 30,
+        attribution: 'Posidonia Oceinaca Koruma Haritası | &copy; 2024. All rights reserved.',
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    googleSat.addTo(map);
+
+        async function fetch_all_locations() {
+        const response = await fetch('/dumpPolygon', {
+            method: "GET"
+        });
+        const result = await response.json();
+        return result;
+    }
+
+    async function mark_all_polygons() {
+        const request_infos = await fetch_all_locations();
+        if (request_infos['successful'] === true) {
+            const polygons = request_infos['locations'];
+            for ( let polygon of polygons ) {
+                    let popup = L.popup()
+                                 .setContent(`Tarihinde eklendi: ${polygon['AddedTime']}.\n Ekleyen Admin: ${polygon['AddedBy']}`);
+
+                    let is_in_danger = polygon['IsInDanger'] ? RED_COLOR : GREEN_COLOR;
+                    let marker = L.polygon(polygon['Polygon'], { color: is_in_danger })
+                                .bindPopup(popup)
+                                .addTo(map).openPopup();
+            }
+            return;
+        }
+        window.alert('Harita verisi alınamadı, önbellek yükleniyor!')
+    }
+    mark_all_polygons();
+</script>
+</body>
+</html>

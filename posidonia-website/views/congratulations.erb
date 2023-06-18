@@ -1,0 +1,64 @@
+<div style="overflow-x: hidden; overflow-y:hidden; -ms-overflow-style: none; scrollbar-width:none;">
+<div class="flex min-h-screen items-center justify-center px-12">
+  <div style="overflow-x: hidden; overflow-y:hidden; -ms-overflow-style: none; scrollbar-width:none;" class="max-w-md rounded-3xl p-px bg-gradient-to-b from-blue-300 to-pink-300 dark:from-blue-800 dark:to-purple-800 ">
+    <div class="rounded-[calc(1.5rem-1px)] p-10 bg-white dark:bg-gray-900">
+      <p style="font-weight: bold; font-family: Poppins, sans-serif;" class="text-gray-700 dark:text-gray-300">
+        YENİ KONUMUN EKLENDİ HARİTADA GÖZ ATABABİLİRSİN! :)
+      </p>
+      <div class="mt-8 flex gap-4 items-center">
+        <img class="h-12 w-12 rounded-full" src="/done.png" alt="HARİTAYA EKLENDİ" />
+        <div>
+          <h3 style="font-weight: bold; font-family: Popping, sans-serif;" class="text-lg font-medium text-gray-700 dark:text-white">Ekleyen: <b><%= session[:username] %></b></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+setTimeout(() => window.location.href='/map', 3500)
+// left: 37, up: 38, right: 39, down: 40,
+// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+function preventDefault(e) {
+  e.preventDefault();
+}
+
+function preventDefaultForScrollKeys(e) {
+  if (keys[e.keyCode]) {
+    preventDefault(e);
+    return false;
+  }
+}
+
+// modern Chrome requires { passive: false } when adding event
+var supportsPassive = false;
+try {
+  window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+    get: function () { supportsPassive = true; }
+  }));
+} catch(e) {}
+
+var wheelOpt = supportsPassive ? { passive: false } : false;
+var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
+
+// call this to Disable
+function disableScroll() {
+  window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
+  window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+  window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+  window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+
+// call this to Enable
+function enableScroll() {
+  window.removeEventListener('DOMMouseScroll', preventDefault, false);
+  window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
+  window.removeEventListener('touchmove', preventDefault, wheelOpt);
+  window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+}
+
+disableScroll()
+</script>

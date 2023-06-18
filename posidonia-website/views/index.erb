@@ -1,0 +1,40 @@
+<head>
+    <style>
+        #mainframe { overflow-x: hidden;}
+        #gotobtn {background-color: #fff; border: 2px solid black; filter: drop-shadow(1px 0px 1rem white;)}
+        #gotobtn:hover{ background-color: #2E8B57; color: white; border:2px solid white; filter: drop-shadow(0 0 .75 white)}
+    </style>
+</head>
+<div id="mainframe" class="z-30 relative items-center justify-center w-full h-[75vh] overflow-hidden">
+    <div style="margin-top: -100px;" class="overflow-scroll absolute inset-0  z-30  flex flex-col items-center justify-center">
+        <div style="background-color: tansparent; filter:drop-shadow(1px 10px 0px black) background-image: url('/Posidonia.png');" class="shadow-2xl rounded-lg w-4/5 h-96 bg-cover bg-center"
+        >
+            <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="grid grid-cols-12 gap-1">
+                <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube-nocookie.com/embed/aWyJueMd1q4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <div style class="col-span-12 sm:col-span-12 md:col-span-5 lg:col-span-5 xxl:col-span-5">
+                <div style="background: linear-gradient(to left top, #08bf57, #00a0bd); opacity: 1;" class="relative h-full md:h-96 w-full bg-opacity-50 rounded-tr-lg rounded-br-lg">
+                        <div class="p-8">
+                            <p style="opacity: 1;" class="text-white text-xs md:text-sm lg:text-xl mb-4">
+                                <span class="text-white-400 font-semibold text-white text-xl mb-4">O₂</span>|
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur corporis cumque placeat qui magni amet hic unde aut tempore facere sapiente, cupiditate obcaecati, quidem in sed modi, tempora quisquam ea!
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur corporis cumque placeat qui magni amet hic unde aut tempore facere sapiente, cupiditate obcaecati, quidem in sed modi, tempora quisquam ea!
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur corporis cumque placeat qui magni amet hic unde aut tempore facere sapiente, cupiditate obcaecati, quidem in sed modi, tempora quisquam ea!
+                            </p>
+                            <br>
+                          <a href='/map' class="sm:mt-5 md:mt-5 bottom-0 absolute p-2 right-0">
+                                <button id="gotobtn" class="opacity-75 bg-gray-100 text-sm font-bold py-2 px-4 rounded inline-flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Dağılım Haritasını İncele</span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+<%= erb :footer %>
