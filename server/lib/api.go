@@ -20,6 +20,10 @@ func SetupApi() *gin.Engine {
 	r := gin.Default()
 	r.SetTrustedProxies([]string{"0.0.0.0"})
 
+	r.POST("/uploadImage", func(ctx *gin.Context) {
+
+	})
+
 	r.GET("/coordinates/:latitude/:longitude", func(ctx *gin.Context) {
 		latitude := ctx.Params.ByName("latitude")
 		longitude := ctx.Params.ByName("longitude")
