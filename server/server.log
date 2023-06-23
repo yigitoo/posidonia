@@ -1,0 +1,10 @@
+INFO: 2023/06/23 15:05:24 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/06/23 15:05:24 api.go:28: Routes are setting into application.
+INFO: 2023/06/23 15:05:49 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/06/23 15:05:49 api.go:28: Routes are setting into application.
+INFO: 2023/06/23 15:09:07 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/06/23 15:09:07 api.go:28: Routes are setting into application.
+INFO: 2023/06/23 15:16:44 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/06/23 15:16:44 api.go:28: Routes are setting into application.
+INFO: 2023/06/23 15:16:47 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/06/23 15:16:47 api.go:28: Routes are setting into application.

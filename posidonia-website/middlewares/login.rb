@@ -4,11 +4,10 @@ require 'json'
 
 module Middleware
     class Login < Sinatra::Base
-        Dotenv.load()
+        Dotenv.load
         enable :sessions
 
         post ('/login') do
-
             username = params["username"].to_s
             password = params["password"].to_s
             begin
@@ -25,7 +24,6 @@ module Middleware
                 to_main = true
             rescue => error
                 to_main = false
-                puts "failed #{error}"
             end
 
             if to_main == true

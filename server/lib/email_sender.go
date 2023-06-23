@@ -12,17 +12,17 @@ import (
 )
 
 func EmailSender(type_of_mail_protocol string) error {
-
+	InitializeLogger()
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error getting env, %v", err)
+		ErrorLogger.Printf("Error getting env, %v", err)
 	}
 
 	params := os.Args
 	paramsLength := len(params)
 	if paramsLength < 2 {
-		log.Println("Please add SMTP or OAUTH along with go run main.go command")
-		log.Println("Eg: go run main.go SMTP or go run main.go OAUTH")
+		WarningLogger.Println("Please add SMTP or OAUTH along with go run main.go command")
+		WarningLogger.Println("Eg: go run main.go SMTP or go run main.go OAUTH")
 		os.Exit(1)
 	}
 
@@ -44,10 +44,10 @@ func EmailSender(type_of_mail_protocol string) error {
 		if inputMethod == "SMTP" {
 			status, err := gomail.SendEmailSMTP([]string{emailTo}, data, "sample_template.txt")
 			if err != nil {
-				log.Println(err)
+				ErrorLogger.Println(err)
 			}
 			if status {
-				log.Println("Email sent successfully using SMTP")
+				InfoLogger.Println("Email sent successfully using SMTP")
 			}
 		}
 
@@ -55,10 +55,10 @@ func EmailSender(type_of_mail_protocol string) error {
 			gomail.OAuthGmailService()
 			status, err := gomail.SendEmailOAUTH2(emailTo, data, "sample_template.txt")
 			if err != nil {
-				log.Println(err)
+				ErrorLogger.Println(err)
 			}
 			if status {
-				log.Println("Email sent successfully using OAUTH")
+				InfoLogger.Println("Email sent successfully using OAUTH")
 				return nil
 			}
 		}

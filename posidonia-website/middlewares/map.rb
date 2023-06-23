@@ -30,7 +30,6 @@ module Middleware
             if session[:id] and session[:username] then
 
                 polygon_list = @request_payload_addItem['locations']
-                pp polygon_list
                 polygon_architecture = Array.new()
                 for i in polygon_list do
                     string_of_one_coord = i[0].to_s + ':' + i[1].to_s
