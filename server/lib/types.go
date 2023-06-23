@@ -1,14 +1,18 @@
 package lib
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"mime/multipart"
 
-/// UserID is equal to BSON ObjectID but in Hex/String format.
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
+// / UserID is equal to BSON ObjectID but in Hex/String format.
 type UserID string
 
-/// Username = Ex: "yigit" / "admin".
+// / Username = Ex: "yigit" / "admin".
 type Username string
 
-/// strftime string format keeper.
+// / strftime string format keeper.
 type TimeStr string
 
 type Coordinates []float64
@@ -18,7 +22,7 @@ type Locations struct {
 	Polygon    []Coordinates      `bson:"polygon"`
 	AddedTime  string             `bson:"added_time"`
 	AddedBy    string             `bson:"added_by"`
-  IsInDanger bool               `bson:"is_in_danger"`
+	IsInDanger bool               `bson:"is_in_danger"`
 }
 
 type User struct {
@@ -28,8 +32,17 @@ type User struct {
 }
 
 type AddPolygon_RequestPayload struct {
-	Polygon   []string `json:"polygon"`
-	AddedBy   UserID   `json:"addedBy"`
-  AddedTime TimeStr  `json:"addedTime"`
-  IsInDanger bool `json:"is_in_danger"`
+	Polygon    []string `json:"polygon"`
+	AddedBy    UserID   `json:"addedBy"`
+	AddedTime  TimeStr  `json:"addedTime"`
+	IsInDanger bool     `json:"is_in_danger"`
+}
+
+type ImageUpload struct {
+	Image *multipart.FileHeader `form:"image_upload", binding:"required"`
+}
+
+type ImageUploadWithID struct {
+	Id          string `uri:"id"`
+	ImageUpload ImageUpload
 }

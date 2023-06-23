@@ -7,21 +7,56 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/olahol/go-imageupload"
 	"github.com/tidwall/gjson"
 )
 
 var config Config = NewConfig()
 var iPORT int16 = config.GetPort()
 var PORT = fmt.Sprintf(":%s", strconv.Itoa(int(iPORT)))
+var currentImage *imageupload.Image
 
 func SetupApi() *gin.Engine {
+	InitializeLogger()
 	config.SetApiKeys()
+
+	InfoLogger.Println("===PROGRAM_STARTED===")
 
 	r := gin.Default()
 	r.SetTrustedProxies([]string{"0.0.0.0"})
+	r.Static("/public", "./public")
+	r.LoadHTMLGlob("templates/*.html")
 
-	r.POST("/uploadImage", func(ctx *gin.Context) {
+	InfoLogger.Println("Routes are setting into application.")
 
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "index.html", nil)
+	})
+
+	r.POST("/imageUpload", func(ctx *gin.Context) {
+		var img_uplaod ImageUpload
+		if err := ctx.ShouldBind(&img_uplaod); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		if err := ctx.ShouldBindUri(&img_uplaod); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Bad request gate v1."})
+			return
+		}
+
+		can_pass_middleware := FileNameAnalyzer(img_uplaod.Image.Filename)
+		if !can_pass_middleware {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Bad request gate v2."})
+			return
+		}
+
+		err := ctx.SaveUploadedFile(img_uplaod.Image, "uploads/"+RandomIDGenerator()+".png")
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unknown file upload error!"})
+		}
+
+		ctx.Redirect(http.StatusPermanentRedirect, "/")
 	})
 
 	r.GET("/coordinates/:latitude/:longitude", func(ctx *gin.Context) {

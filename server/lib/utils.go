@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,6 +20,24 @@ import (
 func ValidateLogin(username, password string) (User, error) {
 	user, err := FindUser(username, password)
 	return user, err
+}
+
+func RandomIDGenerator() string {
+	return uuid.NewString()
+}
+
+func FileNameAnalyzer(filename string) bool {
+	accepted_file_assocs := []string{".png", ".jpg", ".jpeg", ".PNG", ".JPG", ".JPEG"}
+	can_pass_middleware := false
+
+	for _, assoc := range accepted_file_assocs {
+		if strings.HasSuffix(filename, assoc) {
+			can_pass_middleware = true
+			break
+		}
+	}
+
+	return can_pass_middleware
 }
 
 func AddPolygon(compressed_polygon_list []string, addedBy, addedTime string, isInDanger bool) error {
