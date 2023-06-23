@@ -7,14 +7,12 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/olahol/go-imageupload"
 	"github.com/tidwall/gjson"
 )
 
 var config Config = NewConfig()
 var iPORT int16 = config.GetPort()
 var PORT = fmt.Sprintf(":%s", strconv.Itoa(int(iPORT)))
-var currentImage *imageupload.Image
 
 func SetupApi() *gin.Engine {
 	InitializeLogger()
@@ -24,39 +22,32 @@ func SetupApi() *gin.Engine {
 
 	r := gin.Default()
 	r.SetTrustedProxies([]string{"0.0.0.0"})
-	r.Static("/public", "./public")
-	r.LoadHTMLGlob("templates/*.html")
+	r.Static("/public/", "./public")
+	r.LoadHTMLGlob("./templates/*.html")
 
 	InfoLogger.Println("Routes are setting into application.")
 
 	r.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "index.html", nil)
+		ctx.HTML(http.StatusOK, "index.html", gin.H{
+			"content": "This is an index page...",
+		})
 	})
 
 	r.POST("/imageUpload", func(ctx *gin.Context) {
-		var img_uplaod ImageUpload
-		if err := ctx.ShouldBind(&img_uplaod); err != nil {
+		var image_upload ImageUpload
+		if err := ctx.ShouldBind(&image_upload); err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		InfoLogger.Println("Image is being uploaded.")
+		InfoLogger.Println(image_upload)
 
-		if err := ctx.ShouldBindUri(&img_uplaod); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Bad request gate v1."})
-			return
+		can_pass, assoc := FileNameAnalyzer(image_upload.Image.Filename)
+		if can_pass {
+			InfoLogger.Println("File name is valid.")
+			ctx.SaveUploadedFile(image_upload.Image, "public/uploads/"+RandomIDGenerator()+assoc)
+			ctx.Redirect(http.StatusMovedPermanently, "/")
 		}
-
-		can_pass_middleware := FileNameAnalyzer(img_uplaod.Image.Filename)
-		if !can_pass_middleware {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Bad request gate v2."})
-			return
-		}
-
-		err := ctx.SaveUploadedFile(img_uplaod.Image, "uploads/"+RandomIDGenerator()+".png")
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Unknown file upload error!"})
-		}
-
-		ctx.Redirect(http.StatusPermanentRedirect, "/")
 	})
 
 	r.GET("/coordinates/:latitude/:longitude", func(ctx *gin.Context) {

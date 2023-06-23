@@ -26,18 +26,20 @@ func RandomIDGenerator() string {
 	return uuid.NewString()
 }
 
-func FileNameAnalyzer(filename string) bool {
+func FileNameAnalyzer(filename string) (bool, string) {
 	accepted_file_assocs := []string{".png", ".jpg", ".jpeg", ".PNG", ".JPG", ".JPEG"}
 	can_pass_middleware := false
+
+	var file_assoc string
 
 	for _, assoc := range accepted_file_assocs {
 		if strings.HasSuffix(filename, assoc) {
 			can_pass_middleware = true
-			break
+			file_assoc = assoc
 		}
 	}
 
-	return can_pass_middleware
+	return can_pass_middleware, file_assoc
 }
 
 func AddPolygon(compressed_polygon_list []string, addedBy, addedTime string, isInDanger bool) error {
