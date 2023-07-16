@@ -119,8 +119,6 @@ func SetupApi() *gin.Engine {
 
 	})
 
-	r.POST("/bbox")
-
 	r.GET("/bbox/:latitude/:longitude", func(ctx *gin.Context) {
 		latitude := ctx.Params.ByName("latitude")
 		longitude := ctx.Params.ByName("longitude")
