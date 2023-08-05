@@ -10,3 +10,20 @@ INFO: 2023/06/23 15:16:47 api.go:21: ===PROGRAM_STARTED===
 INFO: 2023/06/23 15:16:47 api.go:28: Routes are setting into application.
 INFO: 2023/08/05 12:53:45 api.go:21: ===PROGRAM_STARTED===
 INFO: 2023/08/05 12:53:45 api.go:28: Routes are setting into application.
+INFO: 2023/08/05 13:04:19 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/08/05 13:04:19 api.go:28: Routes are setting into application.
+INFO: 2023/08/05 13:04:34 api.go:42: Image is being uploaded.
+INFO: 2023/08/05 13:04:34 api.go:43: {0xc00031e060}
+INFO: 2023/08/05 13:04:34 api.go:47: File name is valid.
+INFO: 2023/08/05 13:04:59 api.go:42: Image is being uploaded.
+INFO: 2023/08/05 13:04:59 api.go:43: {0xc000198ba0}
+INFO: 2023/08/05 13:04:59 api.go:47: File name is valid.
+INFO: 2023/08/05 13:05:16 api.go:42: Image is being uploaded.
+INFO: 2023/08/05 13:05:16 api.go:43: {0xc0000d44e0}
+INFO: 2023/08/05 13:05:16 api.go:47: File name is valid.
+INFO: 2023/08/05 13:05:25 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/08/05 13:05:25 api.go:28: Routes are setting into application.
+INFO: 2023/08/05 18:02:56 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/08/05 18:02:56 api.go:28: Routes are setting into application.
+INFO: 2023/08/05 19:00:21 api.go:21: ===PROGRAM_STARTED===
+INFO: 2023/08/05 19:00:21 api.go:28: Routes are setting into application.
