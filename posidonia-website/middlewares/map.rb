@@ -23,27 +23,80 @@ module Middleware
             @request_payload_getBbox = JSON.parse request.body.read
         end
 
-        post '/addItem' do
+        post '/addVector' do
             request.body.rewind
-            @request_payload_addItem = JSON.parse request.body.read
+            @request_payload_addVector = JSON.parse request.body.read
 
             if session[:id] and session[:username] then
 
-                polygon_list = @request_payload_addItem['locations']
+                polygon_list = @request_payload_addVector['locations']
                 polygon_architecture = Array.new()
                 for i in polygon_list do
-                    string_of_one_coord = i[0].to_s + ':' + i[1].to_s
-                    polygon_architecture.append(string_of_one_coord)
+                    string_of_one_coordinate = i[0].to_s + ':' + i[1].to_s
+                    polygon_architecture.append(string_of_one_coordinate)
+                end
+
+                depth_list = @request_payload_addVector['depths']
+                depth_architecture = Array.new()
+
+                for one_depth in depth_list do
+                    depth_architecture.append(one_depth)
                 end
 
                 uri = URI("http://localhost:#{ENV['GO_PORT']}/addPolygon")
                 http = Net::HTTP.new(uri.host, uri.port)
                 request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+
                 request.body = {
                     polygon: polygon_architecture,
                     addedBy: session[:username],
                     addedTime: Time.now.strftime("%d/%m/%Y %H:%M")
                 }.to_json
+
+                response = http.request(request)
+                body = JSON.parse response.body
+
+                content_type :json
+
+                if body["successful"] == true then
+                    {
+                        "message": "Place added succesfully by #{session[:username]}",
+                        "status": 200,
+                    }.to_json
+                else
+                    {
+                        "message": "Server error",
+                        "status": 500,
+                    }.to_json
+                end
+            else
+                redirect to('/'), 403
+            end
+
+        end
+
+        post '/addItem' do
+            request.body.rewind
+            @request_payload_addItem = JSON.parse request.body.read
+
+            if session[:id] and session[:username] then
+                polygon_list = @request_payload_addItem['locations']
+                polygon_architecture = Array.new()
+                for i in polygon_list do
+                    string_of_one_coordinate = i[0].to_s + ':' + i[1].to_s
+                    polygon_architecture.append(string_of_one_coordinate)
+                end
+
+                uri = URI("http://localhost:#{ENV['GO_PORT']}/addPolygon")
+                http = Net::HTTP.new(uri.host, uri.port)
+                request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+
+                request.body = {
+                    polygon: polygon_architecture,
+                    addedBy: session[:username],
+                    addedTime: Time.now.strftime("%d/%m/%Y %H:%M")
+                }.to_json
+
                 response = http.request(request)
                 body = JSON.parse response.body
 
