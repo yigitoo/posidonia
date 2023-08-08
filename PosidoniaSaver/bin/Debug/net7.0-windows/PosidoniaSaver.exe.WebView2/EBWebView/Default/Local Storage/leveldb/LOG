@@ -1,5 +1,5 @@
-2023/08/05-20:36:31.137 2ac4 Reusing MANIFEST C:\Users\yigit\posidonia\PosidoniaSaver\bin\Debug\net7.0-windows\PosidoniaSaver.exe.WebView2\EBWebView\Default\Local Storage\leveldb/MANIFEST-000001
-2023/08/05-20:36:31.139 2ac4 Recovering log #7
-2023/08/05-20:36:31.141 2ac4 Reusing old log C:\Users\yigit\posidonia\PosidoniaSaver\bin\Debug\net7.0-windows\PosidoniaSaver.exe.WebView2\EBWebView\Default\Local Storage\leveldb/000007.log 
-2023/08/05-20:36:42.076 60b8 Level-0 table #10: started
-2023/08/05-20:36:42.097 60b8 Level-0 table #10: 14787 bytes OK
+2023/08/05-21:05:27.775 6ff0 Reusing MANIFEST C:\Users\yigit\posidonia\PosidoniaSaver\bin\Debug\net7.0-windows\PosidoniaSaver.exe.WebView2\EBWebView\Default\Local Storage\leveldb/MANIFEST-000001
+2023/08/05-21:05:27.776 6ff0 Recovering log #12
+2023/08/05-21:05:27.776 6ff0 Level-0 table #15: started
+2023/08/05-21:05:27.781 6ff0 Level-0 table #15: 10981 bytes OK
+2023/08/05-21:05:27.789 6ff0 Delete type=0 #12

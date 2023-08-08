@@ -49,9 +49,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1352, 739);
             Controls.Add(webView21);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "Form1";
-            Text = "Form1";
+            Text = "Posidonia Saver";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
             ResumeLayout(false);
